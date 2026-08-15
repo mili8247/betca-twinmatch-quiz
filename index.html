@@ -4,6 +4,22 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Find Your BeTCA Twin — Tech Meet 2026</title>
+
+<!-- Open Graph / social share preview -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://mili8247.github.io/betca-twinmatch-quiz/" />
+<meta property="og:title" content="Find Your BeTCA Twin — Tech Meet 2026" />
+<meta property="og:description" content="Answer 8 quick questions and find out which of 35 Belagavi tech companies is your BeTCA twin. Made for Tech Meet 2026." />
+<meta property="og:image" content="https://mili8247.github.io/betca-twinmatch-quiz/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Find Your BeTCA Twin — Tech Meet 2026" />
+<meta name="twitter:description" content="Answer 8 quick questions and find out which of 35 Belagavi tech companies is your BeTCA twin." />
+<meta name="twitter:image" content="https://mili8247.github.io/betca-twinmatch-quiz/og-image.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -222,6 +238,8 @@
      {name:"Example Co", founder:"Jane Doe", photo:"images/jane.jpg", ...}
    Companies without a `photo` property automatically keep showing
    their emoji avatar — nothing breaks if you only add a few at a time. */
+
+const QUIZ_URL = "https://mili8247.github.io/betca-twinmatch-quiz/";
 
 const TAG_LABELS = {
   AI:"Artificial Intelligence", HARDWARE:"Hardware & Robotics", SECURITY:"Cybersecurity",
@@ -455,9 +473,10 @@ function showResult(){
   document.getElementById('sheetBackdrop').classList.add('show');
 
   document.getElementById('shareBtn').onclick = ()=>{
-    const shareText = `My BeTCA twin is ${c.name} (${c.sector})! Find yours at Tech Meet 2026 🎉 #TechMeet2026 #Belagavi`;
-    if(navigator.share){ navigator.share({text: shareText}).catch(()=>{}); }
-    else{
+    const shareText = `My BeTCA twin is ${c.name} (${c.sector})! Find yours at Tech Meet 2026 🎉 #TechMeet2026 #Belagavi\n\n${QUIZ_URL}`;
+    if(navigator.share){
+      navigator.share({ text: shareText, url: QUIZ_URL }).catch(()=>{});
+    } else{
       navigator.clipboard.writeText(shareText).then(()=>{
         const toast=document.getElementById('toast');
         toast.classList.add('show');
