@@ -9,7 +9,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://mili8247.github.io/betca-twinmatch-quiz/" />
 <meta property="og:title" content="Find Your Belagavi Technology Companies Association (BeTCA) Twin — Tech Meet 2026" />
-<meta property="og:description" content="Answer 8 quick questions and find out which of 35 Belagavi tech companies is your Belagavi Technology Companies Association (BeTCA) twin. Made for Tech Meet 2026." />
+<meta property="og:description" content="Answer 8 quick questions and find out which of 38 Belagavi tech companies is your Belagavi Technology Companies Association (BeTCA) twin. Made for Tech Meet 2026." />
 <meta property="og:image" content="https://mili8247.github.io/betca-twinmatch-quiz/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -17,7 +17,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Find Your Belagavi Technology Companies Association (BeTCA) Twin — Tech Meet 2026" />
-<meta name="twitter:description" content="Answer 8 quick questions and find out which of 35 Belagavi tech companies is your Belagavi Technology Companies Association (BeTCA) twin." />
+<meta name="twitter:description" content="Answer 8 quick questions and find out which of 38 Belagavi tech companies is your Belagavi Technology Companies Association (BeTCA) twin." />
 <meta name="twitter:image" content="https://mili8247.github.io/betca-twinmatch-quiz/og-image.png" />
 
 <!-- Google tag (gtag.js) -->
@@ -198,10 +198,6 @@
 
   .retake{ text-align:center; margin-top:14px; padding-bottom:6px; font-size:12.5px; color:#8b84a0; text-decoration:underline; cursor:pointer; background:none; border:none; font-family:inherit; width:100%; }
 
-  .submit-cta{ text-align:center; margin-top:16px; font-size:12.5px; color:#8b84a0; }
-  .submit-cta a{ color:var(--navy); font-weight:700; text-decoration:underline; }
-  .submit-cta-sep{ margin:0 6px; color:#c7c2d6; }
-
   @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 </style>
 </head>
@@ -265,13 +261,6 @@
           </div>
           <a class="btn btn-secondary" id="registerBtn" href="https://tech-meet.betca.org/" target="_blank" rel="noopener">Register for Tech Meet 2026</a>
         </div>
-
-        <div class="submit-cta">
-          Don't see your company? <a href="https://canva.link/4d1h0bvddkp505g" target="_blank" rel="noopener" id="addCompanyLink">Add your slide →</a>
-          <span class="submit-cta-sep">·</span>
-          <a href="./BeTCA-Tech-Meet-2026-Template.pptx" id="downloadTemplateLink">Download PPTX</a>
-        </div>
-
         <button class="retake" id="retakeBtn">🔄 Take the quiz again</button>
       </div>
     </div>
@@ -365,7 +354,10 @@ const companies = [
   {name:"Shrigeet Solutions", founder:"Amit Netalkar · Partner", emoji:"🏫", tag1:"CLOUD", tag2:"EDU", sector:"ERP & Institutional Software", blurb:"You'll click over ERP, CAD and management software built for hospitals and colleges."},
   {name:"All About Belgaum", founder:"Uday Kinjawadekar · Founder", emoji:"📰", tag1:"LOCAL", tag2:"MARKETING", sector:"Local Media & Storytelling", blurb:"You'll click over telling Belagavi's own stories, before anyone else does."},
   {name:"Ahava Solutions", founder:"Rushiraj Deshpande · Partner", emoji:"💼", tag1:"FINTECH", tag2:"CLOUD", sector:"Finance & Accounting BPO", blurb:"You'll click over the finance back-office work that keeps other companies honest."},
-  {name:"Playtech", founder:"Vibha Kashyap · Co-Founder", emoji:"🔒", tag1:"SECURITY", tag2:"CLOUD", sector:"Privacy-First Apps", blurb:"You'll click over privacy-first apps built exactly to spec, nothing off-the-shelf."}
+  {name:"Playtech", founder:"Vibha Kashyap · Co-Founder", emoji:"🔒", tag1:"SECURITY", tag2:"CLOUD", sector:"Privacy-First Apps", blurb:"You'll click over privacy-first apps built exactly to spec, nothing off-the-shelf."},
+  {name:"Shreshta IT Technologies", founder:"Swapneel Patnekar · Managing Director", emoji:"🕵️", tag1:"SECURITY", tag2:"CLOUD", sector:"Cybersecurity & Digital Forensics", blurb:"You'll click over hunting cyber threats and building the mobile forensics tools law enforcement actually uses."},
+  {name:"Simply Smart Labs", founder:"Shreyans Bhandari · CEO", emoji:"💡", tag1:"HARDWARE", tag2:"INDUSTRIAL", sector:"Product Design & 3D Printing", blurb:"You'll click over 3D-printing prototypes and designing lighting products that turn ideas into things you can hold."},
+  {name:"IP-FY", founder:"Harsh Pangi · Founder", emoji:"⚖️", tag1:"LOCAL", tag2:"EDU", sector:"IP Law & Startup Mentorship", blurb:"You'll click over protecting other people's brainchildren — patents, trademarks, and the paperwork that keeps ideas theirs."}
 ];
 
 const questions = [
@@ -456,6 +448,13 @@ const chatLog = document.getElementById('chatLog');
 const progressRow = document.getElementById('progressRow');
 const fakeInputText = document.getElementById('fakeInputText');
 const headerSub = document.getElementById('headerSub');
+
+// Single source of truth for the company count — reused everywhere it's
+// shown in-app so adding/removing companies never needs a manual find/replace.
+function companyCountLabel(){
+  return `${companies.length} companies · Tech Meet 2026`;
+}
+headerSub.textContent = companyCountLabel();
 
 questions.forEach((_, i)=>{
   const d = document.createElement('div');
@@ -601,7 +600,7 @@ function finishQuiz(){
   headerSub.textContent = "Calculating your twin…";
   fakeInputText.textContent = "Result ready ↓";
   const greetName = userName ? `, ${userName}` : "";
-  addBotBubble(`Alright${greetName}, that's everything I need 🎉 Let me find your twin among all 35 companies…`);
+  addBotBubble(`Alright${greetName}, that's everything I need 🎉 Let me find your twin among all ${companies.length} companies…`);
   setTimeout(()=>{
     addTyping(()=>{
       const scored = shuffle(companies.slice()).map(c=>({
@@ -698,16 +697,9 @@ document.getElementById('retakeBtn').onclick = ()=>{
   chatLog.innerHTML=''; scores={}; Object.keys(TAG_LABELS).forEach(k=>scores[k]=0);
   matchList=[]; matchIdx=0; userName='';
   document.querySelectorAll('.dot').forEach(d=>d.classList.remove('done','current'));
-  headerSub.textContent = "35 companies · Tech Meet 2026";
+  headerSub.textContent = companyCountLabel();
   fakeInputText.textContent = "Tap an option above to reply";
   setTimeout(startQuiz, 200);
-};
-
-document.getElementById('addCompanyLink').onclick = ()=>{
-  track('add_company_click', { source: 'canva' });
-};
-document.getElementById('downloadTemplateLink').onclick = ()=>{
-  track('add_company_click', { source: 'pptx_download' });
 };
 
 renderUrgencyBanner();
